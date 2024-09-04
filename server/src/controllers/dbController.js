@@ -7,8 +7,8 @@ import { tursoDB } from '../db.js'
  * @param {*} query  SQL query, required
  * @param {*} params parameters used in the query, optional
  * @param {*} isSelectQuery by defautl is true, in case is not a SELECT ... FROM ... set to false
- * @returns returns the result of the query. 
- * In case of a SELECT ... FROM ... returns the first row, in case of INSERT INTO ... returns the lastInsertRowid
+ * @returns returns the an array with the result of the query. 
+ * In case of a SELECT ... FROM ... returns the rows array, in case of INSERT INTO ... returns the lastInsertRowid
  */
 export const runQuery = async (query, params = [], isSelectQuery = true) => {
   let rs;
@@ -17,7 +17,7 @@ export const runQuery = async (query, params = [], isSelectQuery = true) => {
 
     if (isSelectQuery) {
       rs = await tursoDB.execute(query, params);
-      return rs.rows != 0 ? rs.rows[0] : { rows: 0 };
+      return { rows: rs.rows };
 
     } else {
 

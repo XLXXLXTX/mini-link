@@ -21,14 +21,14 @@ router.get('/:hashURL', async (req, res) => {
 
     // check if the hashURL is already registered
     const result = await getLongURL(hashURL);
+    const { longURL } = result;
 
     // if the hashURL is not registered, return an error
-    if (!result) {
+    if (!longURL) {
       return res.status(404).json({ error: 'ERROR: shortURL not created' });
     }
 
     // if the hashURL is registered, redirect to the longURL
-    const { longURL } = result;
     res.redirect(301, `${longURL}`);
 
   } catch (error) {

@@ -11,7 +11,7 @@ import { encoder, buildShortUrl } from '../utils/shortener.js';
 export async function getLongURL(hashURL) {
   const rs = await runQuery('SELECT longURL FROM links WHERE hashURL = ?;', [hashURL]);
 
-  return rs.length > 0 ? rs[0] : null;
+  return rs.rows.length > 0 ? { longURL: rs.rows[0].longURL } : null;
 }
 
 /**
@@ -23,8 +23,12 @@ export async function getLongURL(hashURL) {
 export async function checkIfURLExists(url) {
   const rs = await runQuery('SELECT longURL, hashURL FROM links WHERE longURL = ?;', [url]);
 
-  let { longURL, hashURL } = rs;
-  let exist = longURL === undefined ? false : true;
+  const { rows } = rs;
+
+  let total = rows.length;
+
+  let exist = total > 0 ? true : false;
+  let hashURL = total > 0 ? rows[0].hashURL : null;
 
   if (exist) {
     return { exist, hashURL };
@@ -49,7 +53,7 @@ export async function createShortURL(req, longURL) {
   if (Array.isArray(hashes)) {
     for (const element of hashes) {
       const rSelect = await runQuery(qSelect, [element]);
-      let { total } = rSelect;
+      let { total } = rSelect.rows[0];
 
       if (total != 0) { continue; }
 
