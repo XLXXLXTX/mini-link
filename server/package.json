@@ -1,0 +1,23 @@
+{
+  "name": "mini-link-backend",
+  "version": "1.0.0",
+  "description": "Backend for mini-link",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon --legacy-watch src/server.js --ignore uploads",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@libsql/client": "^0.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "js-md5": "^0.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
