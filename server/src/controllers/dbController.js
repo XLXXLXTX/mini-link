@@ -32,4 +32,15 @@ export const runQuery = async (query, params = [], isSelectQuery = true) => {
     throw new Error(`❌ Error in query execution: ${error}`);
   }
 
-}; 
+};
+
+export const isValidApiKey = async (apiKey) => {
+  try {
+
+    const result = await runQuery('SELECT * FROM keys WHERE apiKey = ?', [apiKey]);
+    return result.rows.length > 0;
+
+  } catch (error) {
+    throw new Error('Error al verificar la API key');
+  }
+};

@@ -4,6 +4,7 @@ import express from 'express';
 import { formatDate } from '../utils/dateFormatter.js';
 import { getLongURL, checkIfURLExists, createShortURL } from '../controllers/urlController.js';
 import { buildShortUrl } from '../utils/shortener.js';
+import { authenticateApiKey } from '../middleware/auth.js'
 
 const router = express.Router();
 const appStartTime = Date.now();
@@ -36,7 +37,7 @@ router.get('/:hashURL', async (req, res) => {
   }
 });
 
-router.post('/create', async (req, res) => {
+router.post('/create', authenticateApiKey, async (req, res) => {
   try {
     const longURL = req.body.longURL ?? '';
 

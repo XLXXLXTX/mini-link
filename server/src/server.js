@@ -24,7 +24,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // to allow downloading resources for any origin
-app.use(cors());
+app.use(cors({
+  origin: '*', //'http://localhost:5173', // allow only request from this origin
+  methods: ['GET', 'POST'], // allow only these http verbs
+  allowedHeaders: ['Content-Type', 'api-key'], // allow only this headers
+}));
 
 //--------------------------------------------------
 // ROUTES SECTION
