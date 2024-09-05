@@ -34,6 +34,11 @@ export const runQuery = async (query, params = [], isSelectQuery = true) => {
 
 };
 
+/**
+ * Check if the API key is valid
+ * @param {*} apiKey the API key to validate
+ * @returns true if the API key is valid, false otherwise
+ */
 export const isValidApiKey = async (apiKey) => {
   try {
 
@@ -41,6 +46,6 @@ export const isValidApiKey = async (apiKey) => {
     return result.rows.length > 0;
 
   } catch (error) {
-    throw new Error('Error al verificar la API key');
+    throw new Error('Error verifying API key');
   }
 };
