@@ -1,10 +1,12 @@
 import React from 'react';
 
-import './App.css';
+import URLShortener from './components/URLShortener';
 
 const App = () => {
   return (
-    <h1>Frontend</h1>
+    <div className='App'>
+      <URLShortener />
+    </div>
   );
 }
 
