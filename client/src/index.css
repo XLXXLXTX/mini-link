@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  transition: background-color 0.5s, color 0.5s;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.dark {
+  background-color: #1a202c;
+  color: #cbd5e0;
+}
