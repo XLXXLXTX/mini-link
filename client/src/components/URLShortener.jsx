@@ -16,6 +16,10 @@ const URLShortener = () => {
 
   const submitCallback = async (data) => {
 
+    // clean any previous messages/errors
+    setCopySuccess("");
+    setServerError("");
+
     try {
       const response = await fetch(backendURL, {
         method: 'POST',
@@ -83,77 +87,92 @@ const URLShortener = () => {
   };
 
   return (
+    <div>
+      <div className="text-text-light bg-background-light dark:bg-background-dark dark:text-text-dark
+      w-full max-w-lg p-8 mx-auto mb-8 rounded-xl shadow-lg">
 
-    <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-900">
-      
-      {/* container form */}
-      <div className="w-2/3 h-auto bg-black p-8 rounded-lg shadow-lg text-center">
-        <div className="mb-6">
-          <h1 className="text-white text-3xl font-bold mb-2">🔗 mini-link!</h1>
-          <p className="text-white">Simplify your links and make them more memorable</p>
+        <div className="text-center mb-6">
+          <h1 className="text-primary-light dark:text-primary-dark text-4xl font-extrabold mb-2">🔗 mini-link!</h1>
+          <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold ">Simplify your links and make them more memorable</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {serverError && <p className="font-bold text-red-500 mb-4">{serverError}</p>} 
-          <div className="flex space-x-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {serverError && <p className="text-red-800 dark:text-red-500 text-center font-bold">{serverError}</p>}
+          <div className="flex flex-col space-y-4">
+
             <input
               type="text"
               name="longURL"
               value={formData.longURL}
               onChange={handleChange}
-              className="w-2/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-secondary-light text-text-light dark:bg-secondary-dark dark:text-text-dark
+              placeholder:font-semibold placeholder:text-gray-600 dark:placeholder:text-gray-400 
+              px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold 
+              focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark
+              transition-colors"
               placeholder="Enter your URL"
             />
-            {errors.longURL && <p className="font-bold text-red-500">{errors.longURL}</p>}
+            {errors.longURL && <p className="text-red-800 dark:text-red-500 font-bold">{errors.longURL}</p>}
 
             <input
               type="text"
               name="apiKey"
               value={formData.apiKey}
               onChange={handleChange}
-              className="w-1/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-secondary-light text-text-light dark:bg-secondary-dark dark:text-text-dark
+              placeholder:font-semibold placeholder:text-gray-600 dark:placeholder:text-gray-400
+              px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold
+              focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark  
+              transition-colors"
               placeholder="Enter your API Key"
             />
-            {errors.apiKey && <p className="font-bold text-red-500">{errors.apiKey}</p>}
+            {errors.apiKey && <p className="text-red-800 dark:text-red-500 font-bold">{errors.apiKey}</p>}
           </div>
-
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+            className="text-white bg-boton-light hover:bg-boton-hover-light dark:bg-boton-dark dark:hover:bg-boton-hover-dark
+            focus:outline-none focus:ring-2 focus:ring-accent-light dark:focus:ring-accent-dark 
+            w-full py-3 rounded-lg shadow-md font-semibold  
+            transition-colors"
+          >
             Get a mini-link!
           </button>
         </form>
       </div>
 
-      {/* container shortURL */}
       {shortURL && (
-        <div className="w-2/3 h-auto mt-6 p-4 bg-green-900 border border-green-950 rounded-lg text-center relative">
+        <div className="w-full max-w-lg mx-auto">
 
-          <div className='flex items-center justify-center '>
+          <div className="flex items-center justify-center">
 
-            <div className="w-5/6 space-x-4">
-              
+            <div className="w-full space-x-2 p-6 bg-green-900 rounded-lg text-center shadow-lg">
               <span className="text-2xl">🔗</span>
               <a
                 href={shortURL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-2xl font-bold text-white underline break-all"
+                className="w-full text-2xl font-bold text-white underline break-all"
               >
                 {shortURL}
               </a>
-
-              <button
-                onClick={copyToClipboard}
-                className="font-semibold bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-              >
-                Copy
-              </button>
+              
+              <div className='w-full'>
+                <button
+                  onClick={copyToClipboard}
+                  className="text-white bg-green-600 hover:bg-green-700
+                  focus:outline-none focus:ring-2 focus:ring-green-500
+                  w-1/4 mt-4 py-2 px-4 rounded-lg shadow-md font-semibold 
+                  transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+              
+              {copySuccess && <p className="text-green-400 mt-2 font-bold">{copySuccess}</p>}
             </div>
 
           </div>
 
-          {copySuccess && <p className="font-bold mt-2 text-green-500">{copySuccess}</p>}
         </div>
       )}
     </div>
