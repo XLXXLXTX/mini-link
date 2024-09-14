@@ -6,8 +6,15 @@ export const useForm = (initialValues, submitCallback) => {
   const [serverError, setServerError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // retrieve the name, type, value, and checked properties from the target element
+    const { name, type, value, checked } = e.target;
+
+    // update the form data based on the type of the input element
+    setFormData((prev) => ({
+      ...prev,
+      // if the type is checkbox, use the checked property
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const validate = () => {
@@ -29,8 +36,10 @@ export const useForm = (initialValues, submitCallback) => {
     }
   };
 
-  const resetForm = () => {
-    setFormData(initialValues);
+  // reset the form data, errors, and server error
+  // or reset the form data with new values
+  const resetForm = (newValues = {}) => {
+    setFormData((prev) => ({ ...prev, ...newValues }));
     setErrors({});
     setServerError('');
   };

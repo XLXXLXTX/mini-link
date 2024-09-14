@@ -46,7 +46,6 @@ const URLShortener = () => {
           // show the existing shortened URL
           setShortURL(errorData.shortURL);
           if (errorData.qrCodeImage) {
-            console.log('QR Code Image:', errorData.qrCodeImage);
             // update the QR code image in the state
             setQrCodeImage(errorData.qrCodeImage);
           }
@@ -56,6 +55,10 @@ const URLShortener = () => {
           // clean the shortURL in case of error
           setShortURL('');
         }
+
+        // reset the form after an error or 404
+        // in this case, clear only the API Key field
+        resetForm({ apiKey: '', generateQR: false });
 
         throw new Error(errorData.error || 'Something went wrong');
       }
@@ -68,7 +71,6 @@ const URLShortener = () => {
         // update the shortURL in the state
         setShortURL(responseData.shortURL);
         if (responseData.qrCodeImage) {
-          console.log('QR Code Image:', responseData.qrCodeImage);
           // update the QR code image in the state
           setQrCodeImage(responseData.qrCodeImage);
         }
@@ -81,7 +83,8 @@ const URLShortener = () => {
       }
 
       // reset the form after a successful operation
-      resetForm();
+      // in this case, clear only the API Key field
+      resetForm({ apiKey: '', generateQR: false });
     } catch (error) {
       // handle other types of errors
       console.error('Error:', error.message);
@@ -179,10 +182,9 @@ const URLShortener = () => {
                 transition-colors'
                 type='checkbox'
                 id='qrCheckbox'
-                name='qrCheckbox'
-                onChange={(e) => {
-                  formData.generateQR = e.target.checked;
-                }}
+                name='generateQR'
+                onChange={handleChange}
+                checked={formData.generateQR}
               />
               <label
                 htmlFor='terms'
