@@ -5,7 +5,6 @@ export const useForm = (initialValues, submitCallback) => {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -25,6 +24,7 @@ export const useForm = (initialValues, submitCallback) => {
       submitCallback({
         longURL: formData.longURL,
         apiKey: formData.apiKey,
+        generateQR: formData.generateQR,
       });
     }
   };
