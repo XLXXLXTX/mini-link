@@ -16,12 +16,13 @@ const Header = () => {
   }, [darkMode]);
 
   return (
-    <header className="flex justify-between items-center p-4 bg-background-light dark:bg-background-dark 
-    transition-colors duration-500">
-      
+    <header
+      className='flex justify-between items-center p-4 bg-background-light dark:bg-background-dark
+      transition-colors duration-500'
+    >
       <button
         onClick={toggleDarkMode}
-        className="bg-secondary-light dark:bg-secondary-dark p-2 rounded"
+        className='bg-secondary-light dark:bg-secondary-dark p-2 rounded'
       >
         {darkMode ? '🌞' : '🌚'}
       </button>
@@ -30,6 +31,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
-

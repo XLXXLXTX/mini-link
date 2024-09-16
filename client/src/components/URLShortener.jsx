@@ -119,8 +119,10 @@ const URLShortener = () => {
   return (
     <div>
       <div
-        className='text-text-light bg-background-light dark:bg-background-dark dark:text-text-dark
-        w-full max-w-lg p-8 mx-auto mt-8 mb-8 rounded-xl shadow-lg'
+        className='text-text-light
+        bg-gradient-to-br from-background-light to-gray-300
+        dark:bg-gradient-to-br dark:from-background-dark dark:to-gray-900
+	    dark:text-text-dark w-full max-w-lg p-8 mx-auto mt-8 mb-8 rounded-xl shadow-lg'
       >
         <div className='text-center mb-6'>
           <h1 className='text-primary-light dark:text-primary-dark text-4xl font-extrabold mb-2'>

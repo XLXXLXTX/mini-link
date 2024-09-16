@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
         // colours for light mode
         'text-light': '#040406',
-        'background-light': '#878d97',
+        'background-light': '#70757d',
         'primary-light': '#0065cd',
         'secondary-light': '#9aaada',
         'accent-light': '#778fd4',
@@ -24,10 +24,8 @@ export default {
         'link-dark': '#007bff',
         'boton-dark': '#465ca0',
         'boton-hover-dark': '#2b4288',
-
       },
     },
   },
   plugins: [],
-}
-
+};
