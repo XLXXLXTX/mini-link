@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "install:all": "npm install --prefix ./client && npm install --prefix ./server",
+    "install:client": "npm install --prefix ./client",
+    "install:server": "npm install --prefix ./server",
+    "run:backend": "npm run start --prefix ./server",
+    "run:frontend": "npm run start --prefix ./client",
+    "dev:backend": "npm run dev --prefix ./server",
+    "dev:frontend": "npm run dev --prefix ./client"
+  }
+}
