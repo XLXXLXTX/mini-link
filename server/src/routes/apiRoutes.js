@@ -43,7 +43,7 @@ router.get('/:hashURL', async (req, res) => {
 
 router.post('/create', authenticateApiKey, async (req, res) => {
   try {
-    const longURL = req.body.longURL ?? '';
+    const { longURL, apiKey } = req.body;
 
     // check if the longURL parameter is received
     if (!longURL) {
@@ -78,7 +78,7 @@ router.post('/create', authenticateApiKey, async (req, res) => {
 
     // longURL is not shortened, create a new shortURL (register it in the database)
     // and return the shortURL created
-    const shortURL = await createShortURL(req, longURL);
+    const shortURL = await createShortURL(req, longURL, apiKey);
 
     // in case the the request had a generatedQR: true, generate the QR code, and send it back
     if (req.body.generateQR) {
