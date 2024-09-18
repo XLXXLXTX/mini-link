@@ -1,4 +1,4 @@
-import { isValidApiKey } from '../controllers/dbController.js'
+import { isValidApiKey } from '../controllers/dbController.js';
 
 /**
  * middleware function to authenticate requests using an API key.
@@ -6,7 +6,7 @@ import { isValidApiKey } from '../controllers/dbController.js'
  * @param {*} req request object
  * @param {*} res response object
  * @param {*} next a callback function to continue to the next middleware or route handler
- * @returns {void} - This function checks if the request contains a valid API key in the headers. 
+ * @returns {void} - This function checks if the request contains a valid API key in the headers.
  * - If no API key is provided, it returns a 401 Unauthorized response.
  * - If an invalid API key is provided, it returns a 403 Forbidden response.
  * - If the API key is valid, it calls the next() function to proceed to the next middleware or route handler.
@@ -24,6 +24,8 @@ export const authenticateApiKey = async (req, res, next) => {
       return res.status(403).json({ error: 'ERROR: Invalid API key' });
     }
 
+    // append the apiKey to the body of the request for further use
+    req.body.apiKey = apiKey;
     next();
   } catch (error) {
     return res.status(500).json({ error: 'ERROR: Internal server error' });
