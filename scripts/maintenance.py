@@ -13,7 +13,15 @@ import pytz
 # get env vars
 url = os.getenv("TURSO_DATABASE_URL")
 auth_token = os.getenv("TURSO_AUTH_TOKEN")
-local_db = os.getenv("LOCAL_DB_PATH")
+local_db = str(os.getenv("LOCAL_DB_PATH"))
+
+# check env vars
+if not url:
+    raise ValueError("TURSO_DATABASE_URL is not set")
+if not auth_token:
+    raise ValueError("TURSO_AUTH_TOKEN is not set")
+if not local_db:
+    raise ValueError("LOCAL_DB_PATH is not set")
 
 # connect to the database
 conn = libsql.connect(database=local_db, sync_url=url, auth_token=auth_token)
