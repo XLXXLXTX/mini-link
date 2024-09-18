@@ -1,19 +1,12 @@
 import os
 import libsql_experimental as libsql
-#from dotenv import load_dotenv
-#from pathlib import Path
-
 from datetime import datetime
 import pytz
-
-# load env vars
-#dotenv_path = Path('../server/.env')
-#load_dotenv(dotenv_path=dotenv_path)
 
 # get env vars
 url = os.getenv("TURSO_DATABASE_URL")
 auth_token = os.getenv("TURSO_AUTH_TOKEN")
-local_db = str(os.getenv("LOCAL_DB_PATH"))
+local_db = os.getenv("LOCAL_DB_PATH")
 
 # check env vars
 if not url:
