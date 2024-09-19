@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ linkName, linkRoute }) => {
   const [darkMode, setDarkMode] = useState(true);
 
   const toggleDarkMode = () => {
@@ -26,6 +27,12 @@ const Header = () => {
       >
         {darkMode ? '🌞' : '🌚'}
       </button>
+
+      <Link to={linkRoute} className='text-xl font-semibold'>
+        <button className='bg-secondary-light dark:bg-secondary-dark p-2 rounded'>
+          {linkName}
+        </button>
+      </Link>
     </header>
   );
 };

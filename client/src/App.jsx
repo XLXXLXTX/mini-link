@@ -1,28 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import URLShortener from './components/URLShortener';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import URLShortenerView from './views/URLShortenerView';
+import LoginView from './views/LoginView';
 
-const App = () => {
+function App() {
   return (
-    <div className='flex flex-col min-h-screen'>
-      {/* Header */}
-      <Header className='h-16' />
-
-      {/* content that will grow to take up the remaining space */}
-      <main
-        className='flex-grow flex items-center justify-center
-        bg-gradient-to-tl from-blue-700 to-indigo-400
-        dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800'
-      >
-        <URLShortener />
-      </main>
-
-      {/* Footer */}
-      <Footer className='h-16' />
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<URLShortenerView />} />
+        <Route path='/login' element={<LoginView />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
