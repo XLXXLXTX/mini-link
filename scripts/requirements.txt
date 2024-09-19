@@ -1,3 +1,2 @@
 libsql-experimental
-python-dotenv
 pytz

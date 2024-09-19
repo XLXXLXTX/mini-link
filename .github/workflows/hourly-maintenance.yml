@@ -24,4 +24,8 @@ jobs:
 
       - name: Run Python script
         working-directory: scripts
+        env:
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          LOCAL_DB_PATH: ${{ secrets.LOCAL_DB_PATH }}
         run: python ./maintenance.py
