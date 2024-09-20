@@ -1,4 +1,28 @@
+import { useState } from 'react';
+
 const Login = () => {
+  const [serverError, setServerError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    setServerError('');
+
+    if (!username || !password) {
+      setServerError('Please enter a username and password');
+      return;
+    }
+
+    if (username != 'admin' || password != 'admin') {
+      setServerError('Invalid username or password');
+      return;
+    }
+
+    alert('Login successful');
+  };
+
   return (
     <div
       className='text-text-light
@@ -12,15 +36,19 @@ const Login = () => {
         </h1>
       </div>
 
-      <form className='space-y-6'>
+      <form onSubmit={handleLogin} className='space-y-6'>
+        {serverError && (
+          <p className='text-red-800 dark:text-red-500 text-center font-bold'>
+            {serverError}
+          </p>
+        )}
         <div className='flex flex-col space-y-4'>
           <input
             type='text'
+            id='username'
             name='username'
-            value=''
-            onChange={() => {
-              console.log('username input changed');
-            }}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className='bg-secondary-light text-text-light dark:bg-secondary-dark dark:text-text-dark
               placeholder:font-semibold placeholder:text-gray-600 dark:placeholder:text-gray-400
               px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold
@@ -30,12 +58,10 @@ const Login = () => {
           />
 
           <input
-            type='text'
+            type='password'
             name='password'
-            value=''
-            onChange={() => {
-              console.log('password input changed');
-            }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className='bg-secondary-light text-text-light dark:bg-secondary-dark dark:text-text-dark
               placeholder:font-semibold placeholder:text-gray-600 dark:placeholder:text-gray-400
               px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold
