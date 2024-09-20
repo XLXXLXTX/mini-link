@@ -27,12 +27,13 @@ const Header = ({ linkName, linkRoute }) => {
       >
         {darkMode ? '🌞' : '🌚'}
       </button>
-
-      <Link to={linkRoute} className='text-xl font-semibold'>
-        <button className='bg-secondary-light dark:bg-secondary-dark p-2 rounded'>
-          {linkName}
-        </button>
-      </Link>
+      {linkName && linkRoute && (
+        <Link to={linkRoute} className='text-xl font-semibold'>
+          <button className='bg-secondary-light dark:bg-secondary-dark p-2 rounded'>
+            {linkName}
+          </button>
+        </Link>
+      )}
     </header>
   );
 };
