@@ -1,13 +1,21 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 
 const Login = () => {
+  const backendURL =
+    import.meta.env.VITE_BACKEND_URL === undefined
+      ? 'http://localhost:3001/auth/login'
+      : `${import.meta.env.VITE_BACKEND_URL}/auth/login`;
+
   const [serverError, setServerError] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setServerError('');
 
     if (!username || !password) {
@@ -15,12 +23,20 @@ const Login = () => {
       return;
     }
 
-    if (username != 'admin' || password != 'admin') {
-      setServerError('Invalid username or password');
-      return;
-    }
+    try {
+      const response = await axios.post(backendURL, { username, password });
 
-    alert('Login successful');
+      // as axios is used, just check the response status, instead of response.data.ok
+      // or whatever specific data inside the response, status is just easier
+      if (response.status === 200) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/admin');
+      }
+
+    } catch (error) {
+      console.error(error.response.data.error);
+      setServerError(error.response.data.error);
+    }
   };
 
   return (
