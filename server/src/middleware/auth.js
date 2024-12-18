@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import { isValidApiKey } from '../controllers/dbController.js';
 
 /**
@@ -29,5 +31,31 @@ export const authenticateApiKey = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(500).json({ error: 'ERROR: Internal server error' });
+  }
+};
+
+export const verifyToken = async (req, res, next) => {
+  try {
+    // get the authorization header
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ error: 'ERROR: No Authorization header provided' });
+    }
+
+    // extract the token from headers
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'ERROR: Token is missing' });
+    }
+
+    // verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // append userId to the request for later
+    req.userId = decoded.id;
+    next();
+  } catch (error) {
+    console.error('JWT Verification Error:', error.message);
+    return res.status(401).json({ error: 'ERROR: Invalid or malformed token' });
   }
 };
