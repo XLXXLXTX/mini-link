@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Sidebar from '../components/Sidebar';
 import Content from '../components/Content';
 
 import KeysView from './KeysView';
+import LinksView from './LinksView';
 
 const DashboardView = () => {
   const backendURL =
     import.meta.env.VITE_BACKEND_URL === undefined
-      ? 'http://localhost:3001/auth/admin'
-      : `${import.meta.env.VITE_BACKEND_URL}/auth/admin`;
+      ? 'http://localhost:3001'
+      : `${import.meta.env.VITE_BACKEND_URL}`;
 
   const navigate = useNavigate();
 
@@ -22,13 +23,13 @@ const DashboardView = () => {
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem('token');
-      if(!token) {
+      if (!token) {
         navigate('/login');
         return;
       }
 
       // check if the token is stored in the local storage
-      const response = await axios.get(backendURL, {
+      const response = await axios.get(`${backendURL}/auth/admin`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -48,7 +49,8 @@ const DashboardView = () => {
   };
 
   const handleLogout = () => {
-    console.log('Logging out...');
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   const toggleSidebar = () => {
@@ -58,13 +60,15 @@ const DashboardView = () => {
   const renderPageContent = () => {
     switch (currentPage) {
       case 'keys':
-        return <KeysView setCurrentPage={setCurrentPage} />;
+        return <KeysView endpoint={`${backendURL}`} path={`auth/keys`} />;
+      case 'links':
+        return <LinksView endpoint={`${backendURL}`} path={'auth/links'} />;
       default:
         return null;
     }
   };
 
-  const pages = [{ icon: '🔑', page: 'Keys' }];
+  const pages = [{ icon: '🔑', page: 'Keys' }, { icon: '🔗', page: 'Links' }];
 
   useEffect(() => {
     fetchUser();
