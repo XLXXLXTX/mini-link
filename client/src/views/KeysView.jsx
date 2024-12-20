@@ -6,6 +6,7 @@ const KeysView = ({ endpoint, path }) => {
   const [apiKey, setApiKey] = useState('');
   const [datetime, setDatetime] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [serverError, setServerError] = useState('API Key and expiration date are required');
 
   const fetchKeys = async () => {
     try {
@@ -29,10 +30,33 @@ const KeysView = ({ endpoint, path }) => {
     }
   };
 
-  const createKey = (e) => {
-    e.preventDefault();
-    console.log(`Creating key ${apiKey} that expires at ${datetime} ...`);
-    return;
+  const createKey = async (e) => {
+    try {
+      e.preventDefault();
+      console.log(`Creating key ${apiKey} that expires at ${datetime} ...`);
+
+      if (!apiKey || !datetime) {
+        setServerError('API Key and expiration date are required');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${endpoint}/auth/create-key`, { apiKey, expiresAt: datetime }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      if (response.status === 200) {
+        fetchKeys();
+        setApiKey('');
+        setDatetime('');
+        setServerError('');
+      }
+    } catch (error) {
+      setServerError(error.response.data.error);
+      console.error('Error creating key:', error);
+    }
   };
 
   const deleteKey = async (idKey) => {
@@ -104,6 +128,11 @@ const KeysView = ({ endpoint, path }) => {
               >
                 Create Key
               </button>
+            </div>
+            <div className='flex space-x-4 justify-center'>
+              {serverError && (
+                <p className='text-red-800 dark:text-red-500 text-center font-bold'>{serverError}</p>
+              )}
             </div>
           </form>
         </div>
