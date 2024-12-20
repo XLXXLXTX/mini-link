@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 
 import { verifyToken } from '../middleware/auth.js';
 import { getUser, getUserById } from '../controllers/userController.js';
-import { getAllURLsGroupByKeys } from '../controllers/urlController.js';
-import { getKeys } from '../controllers/keyController.js';
+import { getAllURLsGroupByKeys, deleteURLById } from '../controllers/urlController.js';
+import { getKeys, deleteKeyById } from '../controllers/keyController.js';
 
 const router = express.Router();
 
@@ -105,6 +105,38 @@ router.get('/links', verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'ERROR: Unable to fetch links' });
+  }
+});
+
+router.post('/delete-key', verifyToken, async (req, res) => {
+  try {
+    const { idKey } = req.body;
+    if (!idKey) {
+      return res.status(400).json({ error: 'ERROR: body param `idKey` not received' });
+    }
+
+    await deleteKeyById(idKey);
+    return res.status(200).json({ message: 'Key deleted' });
+
+  } catch(error) {
+    console.error(error);
+    return res.status(500).json({ error: 'ERROR: Unable to delete key' });
+  }
+});
+
+router.post('/delete-link', verifyToken, async (req, res) => {
+  try {
+    const { idLink } = req.body;
+    if (!idLink) {
+      return res.status(400).json({ error: 'ERROR: body param `idLink` not received' });
+    }
+
+    await deleteURLById(idLink);
+    return res.status(200).json({ message: 'Link deleted' });
+
+  } catch(error) {
+    console.error(error);
+    return res.status(500).json({ error: 'ERROR: Unable to delete link' });
   }
 });
 

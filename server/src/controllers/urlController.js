@@ -89,3 +89,7 @@ export async function getAllURLsGroupByKeys() {
 
   return rs.rows;
 }
+
+export async function deleteURLById(id) {
+  await runQuery('DELETE FROM links WHERE id = ?;', [id], false);
+}
