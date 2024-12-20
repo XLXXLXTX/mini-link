@@ -26,7 +26,7 @@ tz = pytz.timezone('Europe/Madrid')
 dt = datetime.now(tz)
 
 print(f'Expired keys at {dt.strftime("%d/%m/%Y %H:%M:%S")}:')
-cursor = conn.execute("SELECT apiKey, expires_at FROM keys WHERE expires_at < DATETIME('now');")
+cursor = conn.execute("SELECT apiKey, expiresAt FROM keys WHERE expiresAt < DATETIME('now');")
 rows = cursor.fetchall()
 
 print(f'Expired keys found: {len(rows)}')
@@ -39,7 +39,7 @@ if not rows:
 
 print(f'Deleting ...')
 conn.execute("PRAGMA foreign_keys = ON;")
-cursor = conn.execute("DELETE FROM keys WHERE expires_at < DATETIME('now');")
+cursor = conn.execute("DELETE FROM keys WHERE expiresAt < DATETIME('now');")
 conn.commit()
 conn.sync()
 
