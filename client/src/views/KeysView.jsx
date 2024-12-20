@@ -1,67 +1,36 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const KeysView = () => {
+const KeysView = ({ endpoint, path }) => {
   const [keys, setKeys] = useState([]);
   const [apiKey, setApiKey] = useState('');
   const [datetime, setDatetime] = useState('');
 
-  const fetchKeys = () => {
-    console.log(`Fetching keys ...`);
+  const fetchKeys = async () => {
+    try {
+      console.log(`Fetching keys from ${endpoint}/${path} ...`);
 
-    const keys = [
-      {
-        apiKey: 1234,
-        expires_at: '2022-12-31 23:59:59',
-        linksAssociated: [
-          {
-            longURL: 'https://www.google.com',
-            hashURL: 'abc123',
-            creationDate: '2022-12-31 23:59:59',
-          },
-          {
-            longURL: 'https://www.facebook.com',
-            hashURL: 'ghi789',
-            creationDate: '2022-12-31 23:59:59',
-          },
-        ],
-      },
-      {
-        apiKey: 5678,
-        expires_at: '2022-12-31 23:59:59',
-        linksAssociated: [
-          {
-            longURL: 'https://www.twitter.com',
-            hashURL: 'def456',
-            creationDate: '2022-12-31 23:59:59',
-          },
-          {
-            longURL: 'https://www.youtube.com',
-            hashURL: 'ghi789',
-            creationDate: '2022-12-31 23:59:59',
-          },
-          {
-            longURL: 'https://www.bing.com',
-            hashURL: 'abc123',
-            creationDate: '2022-12-31 23:59:59',
-          },
-        ],
-      },
-      {
-        apiKey: 9101,
-        expires_at: '2022-12-31 23:59:59',
-        linksAssociated: [],
-      },
-    ];
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${endpoint}/${path}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    setKeys(keys);
-
-    return;
+      if (response.status === 200) {
+        setKeys(response.data.result);
+      } else {
+        setKeys([]);
+      }
+    } catch (error) {
+      console.error('Error fetching keys:', error);
+      setKeys([]);
+    }
   };
 
   const createKey = (e) => {
     e.preventDefault();
     console.log(`Creating key ${apiKey} that expires at ${datetime} ...`);
-
     return;
   };
 
@@ -85,6 +54,14 @@ const KeysView = () => {
                 className='bg-secondary-light text-text-light dark:bg-secondary-dark dark:text-text-dark placeholder:font-semibold placeholder:text-gray-600 dark:placeholder:text-gray-400 px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark transition-colors w-2/5'
                 placeholder='Enter the API Key'
               />
+
+              {/* add a label for the datetime input */}
+              <label
+                htmlFor='expiresAt'
+                className='text-gray-300 font-semibold w-1/5 text-lg text-right'
+              >
+                Expiration date
+              </label>
 
               <input
                 type='datetime-local'
@@ -122,72 +99,53 @@ const KeysView = () => {
                     API Key
                   </th>
                   <th className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
-                    Expires at
+                    Created at
                   </th>
                   <th className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
-                    Links associated
+                    Expires at
                   </th>
+                  {/* <th className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
+                    Links associated
+                  </th> */}
                   <th className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
                     Operations
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {keys.map((key, index) =>
-                  key.linksAssociated.map((link, linkIndex) => (
-                    <React.Fragment key={`${key.apiKey}-${link.hashURL}`}>
-                      {/* Add a special row between keys */}
-                      {linkIndex === 0 && index > 0 && (
-                        <tr className='bg-gray-700'>
-                          <td colSpan='4' className='h-2'></td>
-                        </tr>
-                      )}
-                      <tr className='border-b border-gray-600'>
-                        <td className='px-6 py-4 text-center text-gray-300 border-r border-gray-600'>
-                          {key.apiKey}
-                        </td>
-                        <td className='px-6 py-4 text-center text-gray-300 border-r border-gray-600'>
-                          {key.expires_at}
-                        </td>
-                        <td className='px-6 py-4 text-left text-gray-300 border-r border-gray-600'>
-                          <div className='flex flex-col items-center'>
-                            <p className='mb-2'>
-                              {link.hashURL} ➡ {link.longURL}
-                            </p>
-                            <button
-                              className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
-                              onClick={() => {
-                                console.log('deleting the link');
-                              }}
-                            >
-                              ❌ Delete Link
-                            </button>
-                          </div>
-                        </td>
-                        <td className='px-6 py-4 text-gray-300 border-r border-gray-600'>
-                          <div className='flex justify-center items-center space-x-6'>
-                            <button
-                              className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all font-semibold'
-                              onClick={() => {
-                                console.log('editing the row');
-                              }}
-                            >
-                              ✏ Edit Key
-                            </button>
-                            <button
-                              className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
-                              onClick={() => {
-                                console.log('deleting the row');
-                              }}
-                            >
-                              ❌ Delete Key
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  ))
-                )}
+                {keys.map((key) => (
+                  <tr key={key.id} className='border-b border-gray-600'>
+                    <td className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg font-bold'>
+                      {key.apiKey}
+                    </td>
+                    <td className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
+                      {key.creationDate}
+                    </td>
+                    <td className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
+                      {key.expiresAt}
+                    </td>
+                    <td className='px-6 py-4 text-gray-300 border-r border-gray-600'>
+                      <div className='flex justify-center items-center space-x-6'>
+                        <button
+                          className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all font-semibold'
+                          onClick={() => {
+                            console.log('editing the row');
+                          }}
+                        >
+                          ✏ Edit
+                        </button>
+                        <button
+                          className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
+                          onClick={() => {
+                            console.log('deleting the row');
+                          }}
+                        >
+                          ❌ Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
