@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 
 import { verifyToken } from '../middleware/auth.js';
 import { getUser, getUserById } from '../controllers/userController.js';
+import { getAllURLsGroupByKeys } from '../controllers/urlController.js';
+import { getKeys } from '../controllers/keyController.js';
 
 const router = express.Router();
 
@@ -56,5 +58,54 @@ router.get('/admin', verifyToken, async (req, res) => {
     return res.status(500).json({ error: 'ERROR: Unable to verify token' });
   }
 })
+
+router.get('/keys', verifyToken, async (req, res) => {
+  try {
+    // retrieve all links from db grouped by keys
+    const keys = await getKeys();
+    return res.status(200).json({ result: keys });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'ERROR: Unable to fetch keys' });
+  }
+});
+
+router.get('/links', verifyToken, async (req, res) => {
+  try {
+    // retrieve all links from db grouped by keys
+    const keys = await getAllURLsGroupByKeys();
+    const formattedKeys  = []
+
+    keys.forEach((item) => {
+      // check if key is already in the formattedKeys array
+      let existingKey = formattedKeys.find((key) => key.apiKey === item.apiKey);
+      // if not added, add it to the formattedKeys array
+      if (!existingKey) {
+        existingKey = {
+          apiKey: item.apiKey,
+          creationDate: item.creationDate,
+          expiresAt: item.expiresAt,
+          linksAssociated: [],
+        };
+        formattedKeys.push(existingKey);
+      }
+      // add the links associated with the key
+      if (item.longURL && item.hashURL && item.creationDate) {
+        existingKey.linksAssociated.push({
+          id: item.id,
+          longURL: item.longURL,
+          hashURL: item.hashURL,
+          creationDate: item.creationDate,
+        });
+      }
+    });
+    return res.status(200).json({ result: formattedKeys });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'ERROR: Unable to fetch links' });
+  }
+});
 
 export default router;

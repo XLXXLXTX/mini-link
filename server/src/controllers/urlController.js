@@ -80,3 +80,12 @@ export async function createShortURL(req, longURL, apiKey) {
 
   return buildShortUrl(req, hashURL);
 }
+
+export async function getAllURLsGroupByKeys() {
+  const rs = await runQuery(`SELECT k.apiKey, k.expiresAt, l.id, l.longURL, l.hashURL, l.creationDate
+             FROM keys k
+             LEFT JOIN links l ON k.id = l.key_id
+             ORDER BY k.apiKey;`);
+
+  return rs.rows;
+}
