@@ -5,6 +5,10 @@ export async function getKeys() {
   return rs.rows;
 }
 
+export async function insertKey(apiKey, expiresAt) {
+  await runQuery('INSERT INTO keys (apiKey, expiresAt) VALUES (?, ?);', [apiKey, expiresAt], false);
+}
+
 export async function deleteKeyById(id) {
   await runQuery('DELETE FROM keys WHERE id = ?;', [id], false);
 }

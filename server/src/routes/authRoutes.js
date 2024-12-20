@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { verifyToken } from '../middleware/auth.js';
 import { getUser, getUserById } from '../controllers/userController.js';
 import { getAllURLsGroupByKeys, deleteURLById } from '../controllers/urlController.js';
-import { getKeys, deleteKeyById } from '../controllers/keyController.js';
+import { getKeys, deleteKeyById, insertKey } from '../controllers/keyController.js';
 
 const router = express.Router();
 
@@ -105,6 +105,22 @@ router.get('/links', verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'ERROR: Unable to fetch links' });
+  }
+});
+
+router.post('/create-key', verifyToken, async (req, res) => {
+  try {
+    const { apiKey, expiresAt } = req.body;
+    if (!apiKey || !expiresAt) {
+      return res.status(400).json({ error: 'ERROR: body param `apiKey` or `expiresAt` not received' });
+    }
+
+    await insertKey(apiKey, expiresAt);
+    return res.status(200).json({ message: 'Key created' });
+
+  } catch(error) {
+    console.error(error);
+    return res.status(500).json({ error: 'ERROR: Unable to create key' });
   }
 });
 
