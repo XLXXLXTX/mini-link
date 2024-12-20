@@ -6,7 +6,7 @@ const KeysView = ({ endpoint, path }) => {
   const [apiKey, setApiKey] = useState('');
   const [datetime, setDatetime] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [serverError, setServerError] = useState('API Key and expiration date are required');
+  const [serverError, setServerError] = useState('');
 
   const fetchKeys = async () => {
     try {
