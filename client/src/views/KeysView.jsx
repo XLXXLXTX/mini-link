@@ -5,6 +5,7 @@ const KeysView = ({ endpoint, path }) => {
   const [keys, setKeys] = useState([]);
   const [apiKey, setApiKey] = useState('');
   const [datetime, setDatetime] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchKeys = async () => {
     try {
@@ -32,6 +33,27 @@ const KeysView = ({ endpoint, path }) => {
     e.preventDefault();
     console.log(`Creating key ${apiKey} that expires at ${datetime} ...`);
     return;
+  };
+
+  const deleteKey = async (idKey) => {
+    try {
+      setIsDeleting(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${endpoint}/auth/delete-key`, { idKey }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      if (response.status === 200) {
+        fetchKeys();
+      }
+    } catch (error) {
+      console.error('Error deleting key');
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   useEffect(() => {
@@ -136,9 +158,8 @@ const KeysView = ({ endpoint, path }) => {
                         </button>
                         <button
                           className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
-                          onClick={() => {
-                            console.log('deleting the row');
-                          }}
+                          onClick={() => deleteKey(key.id)}
+                          disabled={isDeleting}
                         >
                           ❌ Delete
                         </button>

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const LinksView = ({ endpoint, path }) => {
   const [links, setLinks] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchLinks = async () => {
     try {
@@ -23,6 +24,26 @@ const LinksView = ({ endpoint, path }) => {
     } catch (error) {
       console.error('Error fetching links:', error);
       setLinks([]);
+    }
+  };
+
+  const deleteLink = async (idLink) => {
+    try {
+      setIsDeleting(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${endpoint}/auth/delete-link`, { idLink }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        fetchLinks();
+      }
+    } catch (error) {
+      console.error('Error deleting link');
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -123,9 +144,8 @@ const LinksView = ({ endpoint, path }) => {
                             </button>
                             <button
                               className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
-                              onClick={() => {
-                                console.log('deleting the row');
-                              }}
+                              onClick={() => deleteLink(link.id)}
+                              disabled={isDeleting}
                             >
                               ❌ Delete Link
                             </button>
