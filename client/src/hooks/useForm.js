@@ -20,6 +20,9 @@ export const useForm = (initialValues, submitCallback) => {
   const validate = () => {
     const newErrors = {};
     if (!formData.longURL) newErrors.longURL = 'URL is required';
+    // validate the correct url format
+    if (formData.longURL && !/^(http|https):\/\/[^ "]+$/.test(formData.longURL))
+      newErrors.longURL = 'URL is invalid';
     if (!formData.apiKey) newErrors.apiKey = 'API Key is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

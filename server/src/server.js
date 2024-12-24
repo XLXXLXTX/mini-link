@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import apiRoutes from './routes/apiRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 //--------------------------------------------------
 // ENV VARS SECTION
@@ -27,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: '*', //'http://localhost:5173', // allow only request from this origin
   methods: ['GET', 'POST'], // allow only these http verbs
-  allowedHeaders: ['Content-Type', 'api-key'], // allow only this headers
+  allowedHeaders: ['Content-Type', 'Authorization', 'api-key'], // allow only this headers
 }));
 
 //--------------------------------------------------
@@ -35,7 +36,7 @@ app.use(cors({
 //--------------------------------------------------
 
 app.use('/', apiRoutes);
-
+app.use('/auth', authRoutes);
 
 //--------------------------------------------------
 // INIT SERVER SECTION
@@ -43,6 +44,11 @@ app.use('/', apiRoutes);
 
 const initServer = async () => {
   try {
+    console.log(
+      `🔌 Database connected to ${
+        process.env.TURSO_DATABASE_URL ?? process.env.LOCAL_DB_PATH
+      }`
+    );
 
     app.listen(PORT, () => {
       console.log(`✅ Server initiated on http://localhost:${PORT}`);
