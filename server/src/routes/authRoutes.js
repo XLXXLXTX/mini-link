@@ -13,11 +13,6 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
-  if (!process.env.JWT_SECRET) {
-    return res.status(500).json({ error: 'JWT secret is not configured' });
-  }
-
   try {
     // the username and password cant be empty, because in the fronent we are checking that
     // nevetherless, we are going to check it here too
