@@ -47,6 +47,14 @@ const LinksView = ({ endpoint, path }) => {
     }
   };
 
+  const calculateDaysRemaining = (expiresAt) => {
+    const expirationDate = new Date(expiresAt);
+    const currentDate = new Date();
+    const differenceInTime = expirationDate - currentDate;
+    // miliseconds to days
+    return Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+  };
+
   useEffect(() => {
     fetchLinks();
   }, []);
@@ -101,15 +109,18 @@ const LinksView = ({ endpoint, path }) => {
                         </td>
                         <td className='px-6 py-4 text-center text-gray-300 border-r border-gray-600'>
                           {element.expiresAt}
+                          <p className='text-red-500 font-semibold'>
+                            ({calculateDaysRemaining(element.expiresAt)} days remaining)
+                          </p>
                         </td>
 
                         <td className='px-6 py-4 text-center text-gray-300 border-r border-gray-600 font-bold'>
                           <a className='text-blue-500 underline hover:text-blue-700 transition-colors font-medium flex items-center'
-                            href={link.longURL}
+                            href={endpoint + '/' + link.hashURL}
                             target='_blank'
                             rel='noopener noreferrer'
                           >
-                            {link.hashURL}
+                            {endpoint + '/' + link.hashURL}
                             <span className='ml-2'>
                               {/* SVG Icon */}
                               <svg className="h-4 w-4 text-blue-500 hover:text-blue-700"
@@ -134,14 +145,6 @@ const LinksView = ({ endpoint, path }) => {
                         </td>
                         <td className='px-6 py-4 text-gray-300 border-r border-gray-600'>
                           <div className='flex justify-center items-center space-x-6'>
-                            <button
-                              className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all font-semibold'
-                              onClick={() => {
-                                console.log('editing the row');
-                              }}
-                            >
-                              ✏ Edit Link
-                            </button>
                             <button
                               className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
                               onClick={() => deleteLink(link.id)}

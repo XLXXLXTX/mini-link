@@ -80,6 +80,14 @@ const KeysView = ({ endpoint, path }) => {
     }
   };
 
+  const calculateDaysRemaining = (expiresAt) => {
+    const expirationDate = new Date(expiresAt);
+    const currentDate = new Date();
+    const differenceInTime = expirationDate - currentDate;
+    // miliseconds to days
+    return Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+  };
+
   useEffect(() => {
     fetchKeys();
   }, []);
@@ -174,17 +182,12 @@ const KeysView = ({ endpoint, path }) => {
                     </td>
                     <td className='px-6 py-3 text-center text-gray-300 border-r border-gray-600 text-lg'>
                       {key.expiresAt}
+                      <p className='text-red-500 font-semibold'>
+                        ({calculateDaysRemaining(key.expiresAt)} days remaining)
+                      </p>
                     </td>
                     <td className='px-6 py-4 text-gray-300 border-r border-gray-600'>
                       <div className='flex justify-center items-center space-x-6'>
-                        <button
-                          className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all font-semibold'
-                          onClick={() => {
-                            console.log('editing the row');
-                          }}
-                        >
-                          ✏ Edit
-                        </button>
                         <button
                           className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all font-semibold'
                           onClick={() => deleteKey(key.id)}
