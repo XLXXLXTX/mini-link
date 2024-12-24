@@ -1,6 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { verifyToken } from '../middleware/auth.js';
 import { getUser, getUserById } from '../controllers/userController.js';
