@@ -62,9 +62,11 @@ const LinksView = ({ endpoint, path }) => {
   return (
     <div className='flex-grow flex flex-col items-center w-full h-max min-h-full bg-gradient-to-tl from-gray-900 to-gray-800'>
 
-      {links.length === 0 && <p className='text-white mt-4'>No links found</p>}
+      {(links.length === 0 || !links.some(element => element.linksAssociated.length > 0)) && (
+        <p className='text-white mt-4'>No links found</p>
+      )}
 
-      {links.length > 0 && (
+      {links.length > 0 && links.some(element => element.linksAssociated.length > 0) && (
         <div className='w-full mt-4 px-4'>
           <div className='overflow-x-auto'>
             <table className='w-full min-w-full bg-gray-800 border border-gray-600'>
