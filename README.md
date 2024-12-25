@@ -33,7 +33,9 @@ Simple URL shortener app that takes a long URL and returns a shortened version o
 - **Light/Dark Mode:** The app supports light/dark mode.
 - **Responsive Design:** The app is responsive and works on mobile devices.
 - **Copy to Clipboard:** The user can copy the shortened URL to the clipboard.
-- **Error Handling:** the app handles errors and displays them to the user.
+- **Error Handling:** The app handles errors and displays them to the user.
+- **Login/Logout:** The user can log in and log out of the app.
+- **Admin Dashboard:** Dashboard to manage links and api keys as an admin, being able to generate new api keys and delte keys and links.
 
 
 ## Technology Stack:
@@ -46,7 +48,26 @@ Simple URL shortener app that takes a long URL and returns a shortened version o
 This project uses two different `.env` files, one for the frontend and another for the backend. Both files must be created in the respective directories, and can be based on the `.env.template` files provided.
 
 ### Database in local environment:
-If you run the backend project locally, an SQLite database file will be created in the root of the project with the name `mini-link-local.db`. This can be changed editing the `LOCAL_DB_PATH` variable in the backend `.env` file.
+To run the project locally, you need to configure environment variables in the backend `.env` file.
+- `LOCAL_DB_PATH`: sets the path to the SQLite database file that will be used in the local environment.
+When the project is executed locally, an SQLite database file name by default `mini-link-local.db` will be created in the root of the project.
+
+```bash
+mini-link/
+├── client
+│   └── ...
+├── scripts
+│   └── ...
+├── server
+│   └── ...
+├── ...
+├── mini-link-local.db
+└── ...
+```
+
+ This can be changed by editing the `LOCAL_DB_PATH` variable in the backend `.env` file.
+
+Additionally, the environment variables `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` must be removed or commented out, as they are only used in the production environment.
 
 ### Modifying default ports:
 
@@ -56,22 +77,29 @@ If you run the backend project locally, an SQLite database file will be created 
 ### Run in local environment:
 After configuring the project, you can run it by following these steps:
 
-1. Install dependencies for both the frontend and backend projects from the root directory of the project:
+1. Generate the SQLite database file by running the SQL script called `mini-link.sql` in the `scripts` folder, or by running the script called `generate-db` in the same folder:
+
+```bash
+chmod +x /scripts/generate-db.sh
+./scripts/generate-db.sh
+```
+
+2. Install dependencies for both the frontend and backend projects from the root directory of the project:
 ```bash
 npm run install:all
 ```
 
-2. Run the backend project:
+3. Run the backend project:
 ```bash
 npm run start:backend
 ```
 
-3. Run the frontend project:
+4. Run the frontend project:
 ```bash
 npm run start:frontend
 ```
 
-4. Access the frontend project at `http://localhost:5173` by default.
+5. Access the frontend project at `http://localhost:5173` by default.
 
 ---
 
